@@ -1,0 +1,15 @@
+.note{
+	margin-bottom: 15px;
+}
+.form-control {
+    margin-bottom: 20px;
+}
+td:first-child {
+    width: 70%;
+}
+.add-note{
+	float:left;
+}
+.startOver {
+	float: right;
+}
