@@ -13,3 +13,9 @@ td:first-child {
 .startOver {
 	float: right;
 }
+.color{
+	background-color: beige;
+}
+[contenteditable]:focus {
+	background-color: #e9f7f5;
+}

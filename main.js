@@ -16,18 +16,20 @@ $('.add-note').on('click', function(){
 	//adding note to the table
 	if(newNote != ''){
 		noteRow = '<tr>';
-		noteRow +='<td contenteditable = "true">' + newNote + '</td>';
-		noteRow +='<td><button class = "btn btn-info edit">Edit</button></td>';
+		noteRow +='<td class="editNote">' + newNote + '</td>';
+		//noteRow +='<td><button class = "btn btn-info edit">Edit</button></td>';
 		noteRow +='<td><button class = "btn btn-warning timer">Add timer/reminder</button></td>';
 		noteRow +='<td><button class = "btn btn-success delete">Delete</button></td>';
 		noteRow +='</tr>';
 		$('.note-list tbody').append(noteRow);
+
 		
     //reset input
     noteInput.val('').focus();	
 	}else{
 		alert("Add a note..");
 	}
+
     
 });
 
@@ -47,11 +49,18 @@ $('.startOver').on('click', function(){
 	itemInput.focus();
 });
 
-//edit btn
-$('tbody').on('click', '.edit', function(){
-    
-	console.log("clik");
+
+//edit content
+	$('tbody').on('click', '.editNote', function(){
+	$(this).attr("contenteditable", "true");
+
+	console.log("click");	
 });
+	
+
+
+
+
 	
 //timeBtn
 $('tbody').on('click', '.timer', function(){
