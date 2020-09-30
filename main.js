@@ -1,7 +1,8 @@
 var noteInput = $('.note');
 var noteRow = '';
 var timeInput = $('.timeInput');
-var db = [];
+//var db = [];
+getNotes();
 
 	
 	//save note to localstorage
@@ -10,12 +11,26 @@ function saveNotes(){
 }
 //get note
 function getNotes(){
-	var noteFromSt = localStorage.getItem("notes"); 
-	db = JSON.parse(noteFromSt);
-	//console.log(db);
+	var note = localStorage.getItem("notes"); 
+	db = JSON.parse(note);
+	console.log(db);
 	if(!db){
 		db=[];
 	}
+
+db.forEach(drowNote);
+	function drowNote(note){
+		noteRow = '<tr>';
+		noteRow +='<td class="editNote">' + note + '</td>';
+		
+		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
+		
+		
+		noteRow +='<td><button class = "btn btn-success delete">Delete</button></td>';
+		noteRow +='</tr>';
+	$('.note-list tbody').append(noteRow);
+	}
+
 }
 
 
@@ -41,7 +56,6 @@ $('.add-note').on('click', function(note){
 	//console.log(db);
 	var t= new Note(note);
 	saveNotes();
-	getNotes();
 	
 	
 	//adding note to the table
@@ -70,17 +84,19 @@ $('.add-note').on('click', function(note){
 });
 
 
-
 //delete btn
-$('tbody').on('click', '.delete', function(){
-	$(this).closest('tr').remove();
-	
-	//if you like back to focus on new note :)
-	//itemInput.focus();
+
+//$('tbody').on('click', '.delete', function(){
+	//$(this).closest('tr').remove();
+//});
+$('button.delete').on('click', function(){
+	localStorage.removeItem(this);
+	//still in progres
 });
 
 //clearAll
 $('.startOver').on('click', function(){
+	localStorage.clear();
 	location.reload();
 	itemInput.focus();
 });
