@@ -14,12 +14,12 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
 
-    <title>TO DO list</title>
+    <title>TODO list</title>
   </head>
   <body>
    <div class="jumbotron text-center">
    	    <div class="col-8 offset-2">
-		  <h1>TO DO List</h1>
+		  <h1>TODO List</h1>
 		  <input type="text" placeholder="Note here..."class="form-control note">
 		  <button class="btn btn-primary add-note">Add note</button>
 		  <button class="btn btn-danger startOver">Clear all</button>
@@ -28,11 +28,28 @@
   
     <div class="container-fluid">
 	  <div class="row">
-	    <div class="col-8 offset-2">
+	    <div class="col-8 offset-2 all">
        
 		  <table class="table note-list">
-		    <tbody></tbody>
-		  </table>
+		    <tbody></tbody>		
+<!--modal-->			
+		    <div class="modal fade" id="myModal" role="dialog">
+             <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+			    <div class="modal-header">
+                  <h6 class="modal-title">Remainder for this note -<span></span></h6>
+                </div>
+                <div class="modal-body">
+                 <input type="text" class="form-control input-sm" placeholder="..in seconds">
+                 <button type="button" class="btn btn-default saveTime" data-dismiss="modal">Save</button>
+                </div>
+               </div>
+              </div>
+           </div>
+		 
+          </table>
+        </div>			 
+
 		</div>
 	  </div>
 	 </div> 

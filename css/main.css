@@ -17,5 +17,18 @@ td:first-child {
 	background-color: beige;
 }
 [contenteditable]:focus {
-	background-color: #e9f7f5;
+	background-color: #e1daf0;
+}
+.editNote {
+	cursor: pointer;
+}
+#timer {
+	width: 100px;
+	height: 100px;
+	background-color: gray;
+	float: right;
+	display: none;
+}
+.saveTime {
+	float: right;
 }
