@@ -1,11 +1,13 @@
 var noteInput = $('.note');
 var noteRow = '';
 var timeInput = $('.timeInput');
-//var db = [];
+var delayMilliseconds = document.getElementsByClassName('setTime');
+
+
 getNotes();
 
 	
-	//save note to localstorage
+//save note to localstorage
 function saveNotes(){
 	localStorage.setItem("notes",JSON.stringify(db));
 }
@@ -21,7 +23,7 @@ function getNotes(){
 db.forEach(drowNote);
 	function drowNote(note){
 		noteRow = '<tr>';
-		noteRow +='<td class="editNote">' + note + '</td>';
+		noteRow +='<td data-target="note" class="editNote">' + note + '</td>';
 		
 		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
 		
@@ -38,13 +40,13 @@ function Note(note){
     this.note = note;
 }
 
-function removeNote(index){
-	db.splice(index, 1);
-	saveNotes();
-}
-function getNote(index){
-	return db[index];
-}
+//function removeNote(index){
+	//db.splice(index, 1);
+	////saveNotes();
+//}
+//function getNote(index){
+	//return db[index];
+//}
 
 
 
@@ -58,17 +60,11 @@ $('.add-note').on('click', function(note){
 	saveNotes();
 	
 	
-	//adding note to the table
+//adding note to the table
 	if(note != ''){
 		noteRow = '<tr>';
 		noteRow +='<td class="editNote">' + note + '</td>';
-		//noteRow +='<td><button class = "btn btn-info edit">Edit</button></td>';
-		
-		
-		//noteRow +='<td><button type="button" class="btn btn-warning">Timer/remainder</button></td>';
-		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
-		
-		
+	    noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
 		noteRow +='<td><button class = "btn btn-success delete">Delete</button></td>';
 		noteRow +='</tr>';
 		$('.note-list tbody').append(noteRow);
@@ -78,21 +74,18 @@ $('.add-note').on('click', function(note){
 	}else{
 		alert("Add a note..");
 	} 
-	
-
-
 });
 
 
-//delete btn
 
-//$('tbody').on('click', '.delete', function(){
-	//$(this).closest('tr').remove();
-//});
+//delete row btn
+
 $('button.delete').on('click', function(){
-	localStorage.removeItem(this);
-	//still in progres
+	console.log("click");
+	$(this).closest('tr').remove()
 });
+
+
 
 //clearAll
 $('.startOver').on('click', function(){
@@ -106,12 +99,31 @@ $('.startOver').on('click', function(){
 	$('tbody').on('click', '.editNote', function(){
 	$(this).attr("contenteditable", "true");
 });
+
 	
-	
-//
+//adding time by user	
+   function addTime () {
+	  var delayMilliseconds = document.getElementById('setTime').value; 
+	  //console.log(delayMilliseconds);
+      setTimeout(function(){
+		  alert('boo ^-^');
+	  },delayMilliseconds);
+	  
+   }
+   
+
+//add time btn
 $('tbody').on('click', '.remainder', function(){
-	
    console.log("click");
+   var saveTime = document.getElementById('saveT');
+   saveTime.addEventListener('click', addTime);
+   
+});
+
+// reset input because data-dismiss="modal" not working
+$('#myModal').on('hidden.bs.modal', function () {
+    $(this).find("input,textarea,select").val('').end();
+
 });
 
 
