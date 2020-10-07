@@ -4,11 +4,7 @@ var timeInput = $('.timeInput');
 var delayMilliseconds = document.getElementsByClassName('setTime');
 
 
-
 getNotes();
-	//for(var i=0; localStorage.length; i++){
-		//console.log(localStorage.getItem(localStorage.key(i)));
-	//}
 	
 //save note to localstorage
 function saveNotes(){
@@ -33,29 +29,26 @@ db.forEach(drowNote);
 	$('.note-list tbody').append(noteRow);
 	}
 	
-	
-	/////////////////////////////////////////
-	$('button.delete').on('click', function(e){
-		console.log(db);
-		var val = $(e.target).closest('tr').find('#noteToDel').text();  
-        console.log(val); 
-		db.splice($.inArray(val, db), 1);
-		console.log(db);
-		localStorage.setItem("notes",JSON.stringify(db));
-	})
-
-	
 }
+	$('button.delete').on('click', function(e){
+		//console.log(db);
+		var val = $(e.target).closest('tr').find('#noteToDel').text();  
+        //console.log(val); 
+		db.splice($.inArray(val, db), 1);
+		//console.log(db);
+		localStorage.setItem("notes",JSON.stringify(db));
+	    
+	})
 
 
 function Note(note){
     this.note = note;
 }
 
-function removeNote(index){
-	db.splice(index, 1);
-	saveNotes();
-}
+//function removeNote(index){
+	//db.splice(index, 1);
+	//saveNotes();
+//}
 //function getNote(index){
 	//return db[index];
 //}
@@ -64,28 +57,40 @@ $('.add-note').on('click', function(note){
 	var note = noteInput.val();
 
 	
-	db.push(note);
-	var t= new Note(note);
-	saveNotes();
+db.push(note);
+var t= new Note(note);
+saveNotes();
 	
 	
 //adding note to the table
 	if(note != ''){
 		noteRow = '<tr>';
-		noteRow +='<td class="editNote">' + note + '</td>';
+		noteRow +='<td class="editNote" id="noteToDel">' + note + '</td>';
 	    noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
 		noteRow +='<td><button class = "btn btn-success delete" id="del">Delete</button></td>';
 		noteRow +='</tr>';
 		$('.note-list tbody').append(noteRow);
-
+		
+        //////////////////////////
+		
+		$('button.delete').on('click', function(e){
+		//console.log(db);
+		var val = $(e.target).closest('tr').find('#noteToDel').text();  
+        console.log(val); 
+		db.splice($.inArray(val, db), 1);
+		console.log(db);
+		localStorage.setItem("notes",JSON.stringify(db));
+		$(this).closest('tr').remove();
+		
+	    
+	})
     //reset input
     noteInput.val('').focus();	
 	}else{
 		alert("Add a note..");
 	} 
-
+    
 });
-
 
 
 //delete row btn
