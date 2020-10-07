@@ -4,35 +4,47 @@ var timeInput = $('.timeInput');
 var delayMilliseconds = document.getElementsByClassName('setTime');
 
 
-getNotes();
 
+getNotes();
+	//for(var i=0; localStorage.length; i++){
+		//console.log(localStorage.getItem(localStorage.key(i)));
+	//}
 	
 //save note to localstorage
 function saveNotes(){
 	localStorage.setItem("notes",JSON.stringify(db));
 }
-//get note
+//get notes
 function getNotes(){
 	var note = localStorage.getItem("notes"); 
 	db = JSON.parse(note);
-	console.log(db);
+	//console.log(db);
 	if(!db){
 		db=[];
 	}
-
+	
 db.forEach(drowNote);
 	function drowNote(note){
 		noteRow = '<tr>';
-		noteRow +='<td data-target="note" class="editNote">' + note + '</td>';
-		
+		noteRow +='<td data-target="note" class="editNote" id="noteToDel">' + note + '</td>';
 		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
-		
-		
-		noteRow +='<td><button class = "btn btn-success delete">Delete</button></td>';
+		noteRow +='<td><button class="btn btn-success delete" id="del">Delete</button></td>';
 		noteRow +='</tr>';
 	$('.note-list tbody').append(noteRow);
 	}
+	
+	
+	/////////////////////////////////////////
+	$('button.delete').on('click', function(e){
+		console.log(db);
+		var val = $(e.target).closest('tr').find('#noteToDel').text();  
+        console.log(val); 
+		db.splice($.inArray(val, db), 1);
+		console.log(db);
+		localStorage.setItem("notes",JSON.stringify(db));
+	})
 
+	
 }
 
 
@@ -40,22 +52,19 @@ function Note(note){
     this.note = note;
 }
 
-//function removeNote(index){
-	//db.splice(index, 1);
-	////saveNotes();
-//}
+function removeNote(index){
+	db.splice(index, 1);
+	saveNotes();
+}
 //function getNote(index){
 	//return db[index];
 //}
 
-
-
 $('.add-note').on('click', function(note){
 	var note = noteInput.val();
-	//db.push(note);
+
 	
 	db.push(note);
-	//console.log(db);
 	var t= new Note(note);
 	saveNotes();
 	
@@ -65,7 +74,7 @@ $('.add-note').on('click', function(note){
 		noteRow = '<tr>';
 		noteRow +='<td class="editNote">' + note + '</td>';
 	    noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
-		noteRow +='<td><button class = "btn btn-success delete">Delete</button></td>';
+		noteRow +='<td><button class = "btn btn-success delete" id="del">Delete</button></td>';
 		noteRow +='</tr>';
 		$('.note-list tbody').append(noteRow);
 
@@ -74,6 +83,7 @@ $('.add-note').on('click', function(note){
 	}else{
 		alert("Add a note..");
 	} 
+
 });
 
 
@@ -82,7 +92,7 @@ $('.add-note').on('click', function(note){
 
 $('button.delete').on('click', function(){
 	console.log("click");
-	$(this).closest('tr').remove()
+	$(this).closest('tr').remove();
 });
 
 
