@@ -21,7 +21,7 @@ function getNotes(){
 	
 db.forEach(drowNote);
 	function drowNote(note){
-		noteRow = '<tr>';
+		noteRow = '<tr id="execute">';
 		noteRow +='<td data-target="note" class="editNote" id="noteToDel">' + note + '</td>';
 		noteRow +='<td><button class = "btn btn-info edit" id="edit">Edit</button></td>';
 		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
@@ -70,13 +70,6 @@ function Note(note){
     this.note = note;
 }
 
-//function removeNote(index){
-	//db.splice(index, 1);
-	//saveNotes();
-//}
-//function getNote(index){
-	//return db[index];
-//}
 
 $('.add-note').on('click', function(note){
 	var note = noteInput.val();
@@ -89,7 +82,7 @@ saveNotes();
 	
 //adding note to the table
 	if(note != ''){
-		noteRow = '<tr>';
+		noteRow = '<tr id="execute">';
 		noteRow +='<td class="editNote" id="noteToDel">' + note + '</td>';
 		noteRow +='<td><button class = "btn btn-info edit" id="edit">Edit</button></td>';
 	    noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
@@ -97,11 +90,7 @@ saveNotes();
 		noteRow +='</tr>';
 		$('.note-list tbody').append(noteRow);
 		
-        //////////////////////////delete note from localStorage
-		
-/////////////////////delete?????
-				
-				
+			
 		////////////////////////EDIT two events
 
 		$('button.edit').on('click', function(e){
@@ -131,6 +120,7 @@ saveNotes();
 	}else{
 		alert("Add a note..");
 	}
+
 });   
 
 //delete row btn
@@ -148,26 +138,42 @@ $('.startOver').on('click', function(){
 	itemInput.focus();
 });
 
-	
+///////////////////////////////////////////////////////
+
+
+//add time btn
+$('tbody').on('click', '.remainder', function(e){
+   console.log("click");
+   var saveTime = document.getElementById('saveT');
+   saveTime.addEventListener('click', addTime);
+   var noteExecute = $(e.target).closest('tr').find('.editNote').text();
+   //console.log(noteExecute)
+   $('#noteExecute').html(noteExecute);
+   
+});	
 //adding time by user	
    function addTime () {
 	  var delayMilliseconds = document.getElementById('setTime').value; 
 	  //console.log(delayMilliseconds);
       setTimeout(function(){
-		  alert('boo ^-^');
+		  alert("Executed!");
+		  var noteExecuteLS = $('#noteExecute').text();
+		  db.splice($.inArray(noteExecuteLS, db), 1);
+		  console.log(db);
+		  
+		  localStorage.setItem("notes",JSON.stringify(db));
+
+           ///deleteRow
+		   
+		   
+		  
 	  },delayMilliseconds);
 	  
    }
    
+   ////////
 
-//add time btn
-$('tbody').on('click', '.remainder', function(){
-   console.log("click");
-   var saveTime = document.getElementById('saveT');
-   saveTime.addEventListener('click', addTime);
    
-});
-
 // reset input because data-dismiss="modal" not working
 $('#myModal').on('hidden.bs.modal', function () {
     $(this).find("input,textarea,select").val('').end();
