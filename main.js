@@ -171,12 +171,11 @@ $('tbody').on('click', '.remainder', function(e){
 		  
 		  localStorage.setItem("notes",JSON.stringify(db));
 
-           ///deleteRow	  ???
-
-}		
+           ///deleteRow	  ??? 
+	
 	  },delayMilliseconds);
-	  
-   }
+   }  
+
 
    
 // reset input because data-dismiss="modal" not working
