@@ -17,7 +17,7 @@ td:first-child {
 	background-color: beige;
 }
 [contenteditable]:focus {
-	background-color: #e1daf0;
+	background-color: #e9ecef;
 }
 .editNote {
 	cursor: pointer;

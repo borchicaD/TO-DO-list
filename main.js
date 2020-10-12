@@ -1,191 +1,146 @@
-$(document).ready(function() { 
-var noteInput = $('.note');
-var noteRow = '';
-var timeInput = $('.timeInput');
-var delayMilliseconds = document.getElementsByClassName('setTime');
+var addNoteBtn = document.getElementById('addNote');
 
+//notes array from local storage-
+        var notesInLocalStorage = getNotesFromLocalStorage();
 
-getNotes();
+        drawNotes(notesInLocalStorage);
 
-///////////////////////////
-$('.add-note').on('click', function(note){
-	var note = noteInput.val();
+//clearAllBtn
+        $('.startOver').on('click', function(){
+	         localStorage.clear();
+	         location.reload();
+	        itemInput.focus();
+            });
 
-	
-db.push(note);
-var t= new Note(note);
-saveNotes();
-	
-//adding note to the table
-	if(note != ''){
-		noteRow = '<tr id="execute">';
-		noteRow +='<td class="editNote" id="noteToDel">' + note + '</td>';
-		noteRow +='<td><button class = "btn btn-info edit" id="edit">Edit</button></td>';
-	    noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
-		noteRow +='<td><button class = "btn btn-success delete" id="delRow">Delete</button></td>';
-		noteRow +='</tr>';
-		$('.note-list tbody').append(noteRow);
+//draw all notes from array
+        function drawNotes(noteArray){
+	         $('.note-list tbody').html("");
+	            noteArray.forEach(function(note){
+		           noteRow = '<tr id="execute">';
+		           noteRow +='<td data-target="note" class="getNoteText">' + note + '</td>';
+		           noteRow +='<td><button class = "btn btn-info edit" id="editNote">Edit</button></td>';
+		           noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal" id="addTimeBtn">Add remainder</button></td>';
+		           noteRow +='<td><button class="btn btn-success delete" id="deleteNote">Delete</button></td>';
+		           noteRow +='</tr>';
+		        $('.note-list tbody').append(noteRow);
 		
-        ///////////////delete note from localStorage and tRow
+//delete btn's
+	    var deleteNoteBtns = document.querySelectorAll('#deleteNote');
+	    deleteNoteBtns.forEach(deleteNoteBtns=>{
+		deleteNoteBtns.addEventListener('click', deleteNoteFunc)
+	    });
+	
+//edit btn's
+        var editNoteBtns = document.querySelectorAll('#editNote');
+	    editNoteBtns.forEach(editNoteBtns=>{
+		editNoteBtns.addEventListener('click', editNoteFunc);
+	    });
 
-	    $('button.delete').one('click', function(){
-		   $(this).closest('tr').remove();
-		   //console.log(db);
-		   var valNew = $(this).closest('tr').find('#noteToDel').text();  
-           console.log(valNew); 
-		   
-		   db.splice($.inArray(valNew, db), 1);
-		   console.log(db);
-		   localStorage.setItem("notes",JSON.stringify(db));		   
-	    })
-		////////////////////////EDIT two events
-
-		$('button.edit').on('click', function(e){
-		//console.log(db);
-		$('.editNote').attr("contenteditable", "true");
-		var val = $(e.target).closest('tr').find('.editNote').text();  
-        //console.log(val); 
-		var valIndex = db.indexOf(val);
-		console.log(valIndex);
+//addTime btn's	
+	    var addTimeBtns = document.querySelectorAll('#addTimeBtn');
+	    addTimeBtns.forEach(addTimeBtns=>{
+		addTimeBtns.addEventListener('click', addRemainderFunc);
+	    });
 		
-		          $('button.edit').on('click', function(e){
-					 var noteEdited = $(e.target).closest('tr').find('.editNote').text();
-					 console.log(noteEdited); 
-					 console.log(valIndex);
-					 db[valIndex]=noteEdited;
-					 console.log(db);
-					 
-					  
-                    localStorage.setItem("notes",JSON.stringify(db));
-
-	    
-	});
-		});
-	
-    //reset input
-    noteInput.val('').focus();	
-	}else{
-		alert("Add a note..");
-	}
-
-}); 
-	
-//save note to localstorage
-function saveNotes(){
-	localStorage.setItem("notes",JSON.stringify(db));
-}
-//get notes
-function getNotes(){
-	var note = localStorage.getItem("notes"); 
-	db = JSON.parse(note);
-	//console.log(db);
-	if(!db){
-		db=[];
-	}
-	
-db.forEach(drowNote);
-	function drowNote(note){
-		noteRow = '<tr id="execute">';
-		noteRow +='<td data-target="note" class="editNote" id="noteToDel">' + note + '</td>';
-		noteRow +='<td><button class = "btn btn-info edit" id="edit">Edit</button></td>';
-		noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
-		noteRow +='<td><button class="btn btn-success delete" id="del">Delete</button></td>';
-		noteRow +='</tr>';
-	$('.note-list tbody').append(noteRow);
-	}
+//save time on modal btn
+	    var saveTime = document.getElementById('saveT');
+        saveTime.addEventListener('click', addTime);	
+	    });
 }
 
-///////////////delete note from localStorage and tRow
+//deleteNote Function
+        function deleteNoteFunc(){
+	             $(this).closest('tr').remove();
+	             var valNew = $(this).closest('tr').find('.getNoteText').text();  
+		         noteArray.splice($.inArray(valNew, noteArray), 1);
+		         localStorage.setItem("notes",JSON.stringify(noteArray));
 
-	$('button.delete').one('click', function(){
-		$(this).closest('tr').remove();
-		//console.log(db);
-		var val = $(this).closest('tr').find('#noteToDel').text();  
-        //console.log(val); 
-		db.splice($.inArray(val, db), 1);
-		//console.log(db);
-		localStorage.setItem("notes",JSON.stringify(db));    
-	})
-	////////////////////////EDIT two events
+                 drawNotes(noteArray);		   
+} 
 
-		$('button.edit').on('click', function(e){
-		//console.log(db);
-		$('.editNote').attr("contenteditable", "true");
-		var valNote = $(e.target).closest('tr').find('.editNote').text();  
-        //console.log(val); 
-		var valIndex = db.indexOf(valNote);
-		console.log(valIndex);
-		
-		          $('button.edit').on('click', function(e){
-					 var noteEdited = $(e.target).closest('tr').find('.editNote').text();
-					 console.log(noteEdited); 
-					 console.log(valIndex);
-					 db[valIndex]=noteEdited;
-					 console.log(db);
-					 
-					  
-                    localStorage.setItem("notes",JSON.stringify(db));
-		})
-	    
-	})
-
-
-function Note(note){
-    this.note = note;
+//editNote Function
+        function editNoteFunc(){
+		        $('.getNoteText').attr("contenteditable", "true");
+		        var valNote = $(this).closest('tr').find('.getNoteText').text(); 
+		        var valIndex = noteArray.indexOf(valNote);
+//i will fix this :-)
+                      $('button.edit').on('click', function(){
+					  var noteEdited = $(this).closest('tr').find('.getNoteText').text(); 
+					  noteArray[valIndex]=noteEdited;
+                      localStorage.setItem("notes",JSON.stringify(noteArray));
+					  drawNotes(noteArray);
+				       });	
 }
 
 
-		
-////////////////////////////////
+//addRemainder / Time Function
+         function addRemainderFunc(){
+                var noteExecute = $(this).closest('tr').find('.getNoteText').text(); 
+                $('#noteExecute').html(noteExecute);
+}	
 
+         function addTime(){
+		        var delayMilliseconds = document.getElementById('setTime').value; 
+                setTimeout(function(){
+		            var noteExecuteLS = $('#noteExecute').text(); 
+		            noteArray.splice($.inArray(noteExecuteLS, noteArray), 1);
+		            alert("Your TO DO should be executed just now!");
+		            localStorage.setItem("notes",JSON.stringify(noteArray));
+					
+                    drawNotes(noteArray);
+	                },delayMilliseconds);
+}	
 
-//clearAll
-$('.startOver').on('click', function(){
-	localStorage.clear();
-	location.reload();
-	itemInput.focus();
-});
-
-///////////////////////////////////////////////////////
-
-
-//add time btn
-$('tbody').on('click', '.remainder', function(e){
-   console.log("click");
-   var saveTime = document.getElementById('saveT');
-   saveTime.addEventListener('click', addTime);
-   var noteExecute = $(e.target).closest('tr').find('.editNote').text();
-   //console.log(noteExecute)
-   $('#noteExecute').html(noteExecute);
-   
-});	
-//adding time by user	
-   function addTime () {
-	  var delayMilliseconds = document.getElementById('setTime').value; 
-	  //console.log(delayMilliseconds);
-      setTimeout(function(){
-		  alert("Executed!");
-		  var noteExecuteLS = $('#noteExecute').text();
-		  db.splice($.inArray(noteExecuteLS, db), 1);
-		  console.log(db);
-		  
-		  localStorage.setItem("notes",JSON.stringify(db));
-
-           ///deleteRow	  ??? 
-	
-	  },delayMilliseconds);
-   }  
-
-
-   
 // reset input because data-dismiss="modal" not working
-$('#myModal').on('hidden.bs.modal', function () {
-    $(this).find("input,textarea,select").val('').end();
+         $('#myModal').on('hidden.bs.modal', function () {
+         $(this).find("input,textarea,select").val('').end();
+         });
 
+//save note to localstorage
+         function saveNotesToLocalStorage(noteArray){
+	     localStorage.setItem("notes",JSON.stringify(noteArray));
+}
+
+
+//get notes from local storage
+         function getNotesFromLocalStorage(){
+	            var note = localStorage.getItem("notes"); 
+	            noteArray = JSON.parse(note);
+	            if(!noteArray){
+		        noteArray=[];
+	            }
+	        return noteArray;
+}
+
+//add note first time
+    addNoteBtn.addEventListener('click', function(event){
+	var noteInput = document.querySelector('.note');
+	var note = noteInput.value;
+	
+		if(note != ''){
+				// noteRow = '<tr data-key="007">';
+				// noteRow +='<td class="editNote" id="noteToDel">' + note + '</td>';
+				// noteRow +='<td><button class = "btn btn-info edit" id="edit">Edit</button></td>';
+				// noteRow +='<td><button type="button" class="btn btn-warning remainder" data-toggle="modal" data-target="#myModal">Add remainder</button></td>';
+				// noteRow +='<td><button class = "btn btn-success delete" id="delRow">Delete</button></td>';
+				// noteRow +='</tr>';
+				// $('.note-list tbody').append(noteRow);
+		
+		notesInLocalStorage.push(note);
+		saveNotesToLocalStorage(notesInLocalStorage);
+		
+		drawNotes(notesInLocalStorage);
+//reset input
+		noteInput.focus();
+		noteInput.value='';
+		
+	}else{
+		alert("Note cannot be empty..");
+	}
 });
 
 
-})
+
 
 
 
