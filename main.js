@@ -63,8 +63,8 @@ var addNoteBtn = document.getElementById('addNote');
 		        $('.getNoteText').attr("contenteditable", "true");
 		        var valNote = $(this).closest('tr').find('.getNoteText').text(); 
 		        var valIndex = noteArray.indexOf(valNote);
-//i will fix this :-)
-                      $('button.edit').on('click', function(){
+//focusout function after note is edited
+                      $('.getNoteText').focusout (function(){
 					  var noteEdited = $(this).closest('tr').find('.getNoteText').text(); 
 					  noteArray[valIndex]=noteEdited;
                       localStorage.setItem("notes",JSON.stringify(noteArray));

@@ -32,3 +32,8 @@ td:first-child {
 .saveTime {
 	float: right;
 }
+.editIcon {
+	display: block;
+	width: 27px;
+	height: 21px;
+}
